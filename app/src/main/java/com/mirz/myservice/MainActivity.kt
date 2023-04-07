@@ -1,6 +1,7 @@
 package com.mirz.myservice
 
 import android.content.Intent
+import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.mirz.myservice.databinding.ActivityMainBinding
@@ -12,12 +13,22 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         val serviceIntent = Intent(this, MyBackgroundService::class.java)
+        val foregroundServiceIntent = Intent(this, MyForegroundService::class.java)
         binding.btnStartBackgroundService.setOnClickListener {
             startService(serviceIntent)
         }
         binding.btnStopBackgroundService.setOnClickListener {
-//            stopService(serviceIntent)
-            stopService(Intent(this, MyBackgroundService::class.java))
+            stopService(serviceIntent)
+        }
+        binding.btnStartForegroundService.setOnClickListener {
+            if (Build.VERSION.SDK_INT >= 26) {
+                startForegroundService(foregroundServiceIntent)
+            } else {
+                startService(foregroundServiceIntent)
+            }
+        }
+        binding.btnStopForegroundService.setOnClickListener {
+            stopService(foregroundServiceIntent)
         }
     }
 }
